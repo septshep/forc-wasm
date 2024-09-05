@@ -17,7 +17,7 @@ npm install --save forc-wasm
 ### Building the contract
 
 ```javascript
-import forc from 'forc-wasm';
+import * as forc from 'forc-wasm';
 
 // the contract source code
 const code = `
