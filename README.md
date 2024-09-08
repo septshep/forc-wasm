@@ -34,10 +34,8 @@ const code = `
     }`;
 
 // build the contract
-var result = await forc.build({
-    contract: code,   // the contract source code
-    toolchain: 'testnet', // the toolchain to use
-});
+var params = new forc.BuildParams(code, 'testnet');
+var result = forc.build(params);
 ```
 
 The result of `forc.build` is an object with the following fields, if compile
