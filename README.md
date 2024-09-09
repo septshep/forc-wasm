@@ -86,13 +86,7 @@ you will need to install the dependencies:
 - Just https://github.com/casey/just
 
 See our setup for complete details, but after the typical `git clone` it's as
-simple as
-
-```bash
-rustup target add wasm32-unknown-unknown
-```
-
-Now you can just run `just` in the package directory to lists all the available
+simple as running `just` in the package directory to lists all the available
 commands.
 
 ## License
