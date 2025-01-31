@@ -1,5 +1,8 @@
+use forc_pkg as pkg;
 use wasm_bindgen::prelude::*;
 use web_sys::console;
+
+use crate::FORC_PKG_VERSION;
 
 /// The `BuildParams` struct is used to pass parameters to the `build` function.
 #[derive(Debug, Clone)]
@@ -22,7 +25,7 @@ impl BuildParams {
 
 /// The `BuildResult` struct is used to return the result of the `build` function.
 #[wasm_bindgen(getter_with_clone)]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct BuildResult {
     pub abi: String,           // The ABI (Application Binary Interface) of the contract
     pub bytecode: String,      // The bytecode of the contract
@@ -50,6 +53,26 @@ impl BuildResult {
             error,
         }
     }
+
+    pub fn error(message: String) -> BuildResult {
+        BuildResult {
+            error: Some(message),
+            ..Default::default()
+        }
+    }
+}
+
+impl From<pkg::Built> for BuildResult {
+    fn from(built: pkg::Built) -> Self {
+        let pkg = built.expect_pkg().unwrap();
+        BuildResult {
+            abi: pkg.json_abi_string(true).unwrap().unwrap(),
+            bytecode: serde_json::to_string(&pkg.bytecode.bytes).unwrap(),
+            storage_slots: serde_json::to_string(&pkg.storage_slots).unwrap(),
+            forc_version: FORC_PKG_VERSION.into(),
+            ..Default::default()
+        }
+    }
 }
 
 /// The `build` function is used to build the contract.
@@ -59,13 +82,17 @@ pub fn build(params: BuildParams) -> BuildResult {
     console::log_1(&format!("contract: {:?}", &params.contract).into());
     console::log_1(&format!("toolchain: {:?}", &params.toolchain).into());
 
-    // TODO: Implement the build logic here
-    // For now, we'll just return a dummy result
-    BuildResult::new(
-        "abi".to_string(),
-        "bytecode".to_string(),
-        "storage_slots".to_string(),
-        "0.1.0".to_string(),
-        None,
-    )
+    let opts = pkg::BuildOpts::default();
+    let result = pkg::build_with_options(&opts);
+
+    match result {
+        Ok(built) => {
+            console::log_1(&"Build succeeded".into());
+            built.into()
+        }
+        Err(e) => {
+            console::error_1(&format!("Build failed: {:?}", e).into());
+            BuildResult::error(e.to_string())
+        }
+    }
 }
