@@ -3,6 +3,7 @@ use web_sys::console;
 
 /// The `console.log()` function.
 #[inline]
+#[allow(dead_code)]
 pub fn log(data: impl Into<JsValue>) {
     console::log_1(&data.into());
 }
