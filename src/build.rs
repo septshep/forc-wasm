@@ -2,7 +2,7 @@ use forc_pkg as pkg;
 use wasm_bindgen::prelude::*;
 use web_sys::console;
 
-use crate::FORC_PKG_VERSION;
+const FORC_PKG_VERSION: &str = "0.66.6";
 
 /// The `BuildParams` struct is used to pass parameters to the `build` function.
 #[derive(Debug, Clone)]
