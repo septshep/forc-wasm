@@ -37,24 +37,6 @@ pub struct BuildResult {
 
 #[wasm_bindgen]
 impl BuildResult {
-    // Constructor for creating a new BuildResult instance
-    #[wasm_bindgen(constructor)]
-    pub fn new(
-        abi: String,
-        bytecode: String,
-        storage_slots: String,
-        forc_version: String,
-        error: Option<String>,
-    ) -> BuildResult {
-        BuildResult {
-            abi,
-            bytecode,
-            storage_slots,
-            forc_version,
-            error,
-        }
-    }
-
     pub fn error(message: String) -> BuildResult {
         BuildResult {
             error: Some(message),
@@ -91,9 +73,9 @@ pub fn build(params: BuildParams) -> BuildResult {
             console::log("Build succeeded");
             BuildResult::from(built)
         }
-        Err(e) => {
-            console::error(format!("Build failed: {:?}", e));
-            BuildResult::error(e.to_string())
+        Err(err) => {
+            console::error(format!("Build failed: {:?}", err));
+            BuildResult::error(err.to_string())
         }
     }
 }
