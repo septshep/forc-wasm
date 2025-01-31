@@ -1,4 +1,5 @@
 mod build;
+mod console;
 mod greet;
 mod utils;
 

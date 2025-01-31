@@ -1,6 +1,7 @@
 use forc_pkg as pkg;
 use wasm_bindgen::prelude::*;
-use web_sys::console;
+
+use crate::console;
 
 const FORC_PKG_VERSION: &str = "0.66.6";
 
@@ -79,19 +80,19 @@ impl From<pkg::Built> for BuildResult {
 #[wasm_bindgen]
 pub fn build(params: BuildParams) -> BuildResult {
     // Log the contract and toolchain to the console for debugging
-    console::log_1(&format!("contract: {:?}", &params.contract).into());
-    console::log_1(&format!("toolchain: {:?}", &params.toolchain).into());
+    console::log(format!("contract: {:?}", &params.contract));
+    console::log(format!("toolchain: {:?}", &params.toolchain));
 
     let opts = pkg::BuildOpts::default();
     let result = pkg::build_with_options(&opts);
 
     match result {
         Ok(built) => {
-            console::log_1(&"Build succeeded".into());
-            built.into()
+            console::log("Build succeeded");
+            BuildResult::from(built)
         }
         Err(e) => {
-            console::error_1(&format!("Build failed: {:?}", e).into());
+            console::error(format!("Build failed: {:?}", e));
             BuildResult::error(e.to_string())
         }
     }
