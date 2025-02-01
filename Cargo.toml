@@ -24,7 +24,7 @@ forc-pkg = "0.66.6"
 getrandom = { version = "0.2", features = ["js"] }
 hex = "0.4"
 js-sys = "0.3"
-rand = { version = "0.6", features = ["wasm-bindgen"] }
+rand = { version = "0.9", features = ["wasm-bindgen"] }
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
 tokio = { version = "1", features = ["rt", "macros", "net", "time"] }
 serde = { version = "1", features = ["derive"] }
